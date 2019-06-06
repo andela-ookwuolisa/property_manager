@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<h3>Welcome to property manager</h3>
+<h4>List of properties</h4>
+{% if properties %}
+<ul>   
+    {% for property in properties %}
+    <li> {{ property.property_type }} {{ property.id}} {{ property.owner.user.first_name}}</ul>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h4> Add property </h4>
+<form action="/properties" method="POST">
+    <div>
+        <label for='p_type'>Property type</label>
+        <input type="text" id='p_type' name="property_type">
+    </div>
+    <div>
+        <label for='owner'>Owner id</label>
+        <input type="text" id='owner' name="owner_id">
+    </div>
+    <input type="submit">
+</form>
+
+<h4> Update property </h4>
+<form action="/update" method="POST">
+    <div>
+        <label for='id'>Property id</label>
+        <input type="text" id='id' name="id">
+    </div>
+    <div>
+        <label for='p_type'>Property type</label>
+        <input type="text" id='p_type' name="property_type">
+    </div>
+    <div>
+        <label for='owner'>Owner id</label>
+        <input type="text" id='owner' name="owner_id">
+    </div>
+    <input type="submit">
+</form>
+
+<h4> Delete property </h4>
+<form action="/delete" method="POST">
+    <div>
+        <label for='id'>Property id</label>
+        <input type="text" id='id' name="id">
+    </div>
+    <input type="submit">
+</form>
