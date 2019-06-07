@@ -1,8 +1,5 @@
-from app import my_app, create_db
+from app import my_app
 
-def start_app():
-    create_db()
-    my_app.run()
 
 if __name__ == "__main__":
-    start_app()
+    my_app()
