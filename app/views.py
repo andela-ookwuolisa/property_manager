@@ -32,7 +32,6 @@ def check_tenant(tenant_id):
     return tenant
 
 @my_app.route('/')
-@login_required
 def index():
     data = 'Welcome to property manager API'
     return jsonify({'message': 'success', 'data':data}), 200
@@ -181,7 +180,7 @@ def properties():
     if request.method == 'GET':
         properties_obj = db.query(Property)
         properties = [property_.as_dict() for property_ in properties_obj]
-        return jsonify({'message': 'success', 'properties': properties}), 201
+        return jsonify({'message': 'success', 'properties': properties}), 200
 
     elif request.method == 'POST':
         try:
@@ -235,4 +234,4 @@ def get_tenants(property_id):
     ).first()
     property_details = property_.as_dict()
     property_details['tenants'] = [tenant.as_dict() for tenant in property_.tenants]
-    return jsonify({'message': 'Success', 'properties': property_details}), 201
+    return jsonify({'message': 'Success', 'properties': property_details}), 200
