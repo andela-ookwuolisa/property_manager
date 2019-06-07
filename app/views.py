@@ -1,39 +1,15 @@
-from flask import request, session, jsonify, g
+from flask import request, session, jsonify
 from app import my_app, db
 from .models import User, Owner, Tenant, Property
 from utils import login_required, ValidationError
 
 
-def check_user(user_id):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        err = "No user with the id"
+def check_instance(Obj, obj_id, name):
+    obj = db.query(Obj).filter(Obj.id == obj_id).first()
+    if not obj:
+        err = f"No {name} with the id {obj_id}"
         raise ValidationError(err)
-    return user
-
-
-def check_property(property_id):
-    property_ = db.query(Property).filter(Property.id == property_id).first()
-    if not property_:
-        err = "No property with the id"
-        raise ValidationError(err)
-    return property_
-
-
-def check_owner(owner_id):
-    owner = db.query(Owner).filter(Owner.id == owner_id).first()
-    if not owner:
-        err = "No owner with the id"
-        raise ValidationError(err)
-    return owner
-
-
-def check_tenant(tenant_id):
-    tenant = db.query(Tenant).filter(Tenant.id == tenant_id).first()
-    if not tenant:
-        err = "No tenant with the id"
-        raise ValidationError(err)
-    return tenant
+    return obj
 
 
 @my_app.route("/")
@@ -113,7 +89,7 @@ def owner():
     if request.method == "POST":
         user_id = request.form.get("user_id")
         try:
-            check_user(user_id)
+            check_instance(User, user_id, "user")
             owner = Owner(user_id=user_id)
             owner.save()
         except ValidationError as e:
@@ -138,8 +114,8 @@ def tenant():
 
     elif request.method == "POST":
         try:
-            check_user(user_id)
-            check_property(property_id)
+            check_instance(User, user_id, "user")
+            check_instance(Property, property_id, "property")
             tenant = Tenant(user_id=user_id, property_id=property_id)
             tenant.save()
         except ValidationError as e:
@@ -151,8 +127,8 @@ def tenant():
     elif request.method == "PUT":
 
         try:
-            tenant = check_tenant(tenant_id)
-            check_property(property_id)
+            tenant = check_instance(Tenant, tenant_id, "tenant")
+            check_instance(Property, property_id, "property")
             tenant.property_id = property_id
             tenant.save()
         except ValidationError as e:
@@ -185,7 +161,7 @@ def properties():
 
     elif request.method == "POST":
         try:
-            check_owner(owner_id)
+            check_instance(Owner, owner_id, "owner")
             property_ = Property(
                 property_type=property_type,
                 owner_id=owner_id,
@@ -201,11 +177,11 @@ def properties():
 
     elif request.method == "PUT":
         try:
-            property_ = check_property(property_id)
+            property_ = check_instance(Property, property_id, "property")
             if property_type:
                 property_.property_type = property_type
             if owner_id:
-                check_owner(owner_id)
+                check_instance(Owner, owner_id, "owner")
                 property_.owner_id = owner_id
             if location:
                 property_.location = location
@@ -220,7 +196,7 @@ def properties():
 
     elif request.method == "DELETE":
         try:
-            property_ = check_property(property_id)
+            property_ = check_instance(Property, property_id, "property")
             property_.delete()
         except ValidationError as e:
             err = e.message

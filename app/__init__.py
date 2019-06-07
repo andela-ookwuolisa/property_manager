@@ -8,7 +8,6 @@ from config import DevelopmentConfig, ProductionConfig, TestingConfig
 my_app = Flask("property_manaager")
 Base = declarative_base()
 env = os.environ.get("FLASK_ENV", default=None)
-print(env)
 if env == "production":
     my_app.config.from_object(ProductionConfig)
 elif env == "testing":
