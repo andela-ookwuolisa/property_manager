@@ -1,7 +1,7 @@
-from app import my_app, Base, engine
+from app import my_app, create_db
 
 def start_app():
-    # Base.metadata.create_all(engine)
+    create_db()
     my_app.run()
 
 if __name__ == "__main__":

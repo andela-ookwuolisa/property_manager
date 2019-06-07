@@ -11,6 +11,9 @@ Base = declarative_base()
 engine = create_engine('sqlite:///app.db', echo=True, connect_args={'check_same_thread': False})
 Session = sessionmaker(bind=engine)
 db = Session()
-Base.metadata.create_all(engine)
+def create_db():
+    Base.metadata.create_all(engine)
+def drop_db():
+    Base.metadata.drop_all(engine)
 
-import app.views.user, app.views.property
+import app.views
