@@ -1,7 +1,7 @@
 from flask import request, session, jsonify
 from app import my_app, db
 from .models import User, Owner, Tenant, Property
-from utils import login_required, ValidationError
+from .utils import login_required, ValidationError
 
 
 def check_instance(Obj, obj_id, name):
